@@ -28,7 +28,9 @@ const Page = () => {
         />
         <View style={tailwind`gap-1`}>
           <Text style={tailwind`text-lg text-slate-100`}>{item.name}</Text>
-          <Text>{item.description}</Text>
+          <Text style={tailwind`text-xs text-slate-300`}>
+            {item.description}
+          </Text>
         </View>
       </TouchableOpacity>
     );
