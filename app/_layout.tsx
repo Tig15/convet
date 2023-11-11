@@ -23,11 +23,6 @@ export default function RootLayoutNav() {
           name="index"
           options={{
             headerTitle: "My Chats",
-            headerRight: () => (
-              <TouchableOpacity onPress={() => router.push("/(modal)/create")}>
-                <Ionicons name="add-circle-outline" size={30} color="#3876BF" />
-              </TouchableOpacity>
-            ),
           }}
         />
         <Stack.Screen

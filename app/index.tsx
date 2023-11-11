@@ -11,6 +11,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Link, useRouter } from "expo-router";
 import tailwind from "twrnc";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const Page = () => {
   const groups = useQuery(api.groups.get) || [];
@@ -43,6 +44,11 @@ const Page = () => {
         renderItem={renderChats}
         keyExtractor={(item) => item._id.toString()}
       />
+      <View style={tailwind`absolute bottom-10 right-6`} >
+        <TouchableOpacity style={tailwind`w-7 h-7 rounded-full pl-[2px]  bg-yellow-300`} onPress={() => router.push("/(modal)/create")}>
+          <Ionicons name="add" size={26} color="#3876BF" />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
