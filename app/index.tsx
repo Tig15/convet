@@ -6,16 +6,47 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Link, useRouter } from "expo-router";
 import tailwind from "twrnc";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import Dialog from 'react-native-dialog'
 
 const Page = () => {
   const groups = useQuery(api.groups.get) || [];
   const router = useRouter();
+  const [name, setName] = useState("");
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    const user = await AsyncStorage.getItem("user");
+    if (!user) {
+      setTimeout(() => {
+        setVisible(true)
+      }, 100);
+    } else {
+      setName(user);
+    }
+  };
+
+  const setUser = async () => {
+    const r = (Math.random() + 1).toString(36).substring(7)
+    const userName = `${name}#${r}`
+    await AsyncStorage.setItem('user', userName)
+    setName(userName)
+    setVisible(false)
+  }
+
+  const handleLogOut = async () => {
+    await AsyncStorage.clear()
+  }
 
   const renderChats = ({ item }: any) => {
     return (
@@ -44,11 +75,28 @@ const Page = () => {
         renderItem={renderChats}
         keyExtractor={(item) => item._id.toString()}
       />
-      <View style={tailwind`absolute bottom-10 right-6`} >
-        <TouchableOpacity style={tailwind`w-7 h-7 rounded-full pl-[2px]  bg-yellow-300`} onPress={() => router.push("/(modal)/create")}>
+      <View style={tailwind`absolute bottom-10 right-6`}>
+        <TouchableOpacity
+          style={tailwind`w-7 h-7 rounded-full pl-[2px]  bg-yellow-300`}
+          onPress={() => router.push("/(modal)/create")}
+        >
           <Ionicons name="add" size={26} color="#3876BF" />
         </TouchableOpacity>
       </View>
+      <View style={tailwind`absolute bottom-18 right-6`}>
+        <TouchableOpacity
+          style={tailwind`w-7 h-7 rounded-full pl-[5px] pt-[2px]  bg-red-300`}
+          onPress={handleLogOut}
+        >
+          <Ionicons name="exit-outline" size={22} color="white" />
+        </TouchableOpacity>
+      </View>
+      <Dialog.Container visible={visible}>
+        <Dialog.Title>UserName Required</Dialog.Title>
+        <Dialog.Description>Please Insert a name to Start a chatting</Dialog.Description>
+        <Dialog.Input onChangeText={setName} />
+        <Dialog.Button label='Set Name' onPress={setUser} />
+      </Dialog.Container>
     </View>
   );
 };
