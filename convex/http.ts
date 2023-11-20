@@ -19,7 +19,8 @@ http.route({
         await ctx.runMutation(api.messages.sendMessages, {
             content, 
             user,
-            group_id: group_id as Id<'groups'>
+            group_id: group_id as Id<'groups'>,
+            file:storageId
         })
 
         return new Response(JSON.stringify({success:true}))

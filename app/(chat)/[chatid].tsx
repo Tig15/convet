@@ -116,7 +116,7 @@ const Page = () => {
         {item.file && (
           <Image
             source={{ uri: item.file }}
-            style={{ width: 50, height: 50, margin: 10 }}
+            style={{ width: 100, height: 100, margin: 10 }}
           />
         )}
         <View style={tailwind`mt-1`}>

@@ -7,29 +7,40 @@ import {
   FlatList,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "convex/react";
+import { useAction, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Link, useRouter } from "expo-router";
 import tailwind from "twrnc";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Dialog from 'react-native-dialog'
+import Dialog from "react-native-dialog";
 
 const Page = () => {
   const groups = useQuery(api.groups.get) || [];
   const router = useRouter();
   const [name, setName] = useState("");
   const [visible, setVisible] = useState(false);
+  const [greeting, setGreeting] = useState("");
+  const performGreetingAction = useAction(api.greeting.getGreeting);
 
   useEffect(() => {
     loadUser();
   }, []);
 
+  useEffect(() => {
+    if (!name) return;
+    const loadGreeting = async () => {
+      const greeting = await performGreetingAction({ name });
+      setGreeting(greeting);
+    };
+    loadGreeting();
+  }, [name]);
+
   const loadUser = async () => {
     const user = await AsyncStorage.getItem("user");
     if (!user) {
       setTimeout(() => {
-        setVisible(true)
+        setVisible(true);
       }, 100);
     } else {
       setName(user);
@@ -37,16 +48,16 @@ const Page = () => {
   };
 
   const setUser = async () => {
-    const r = (Math.random() + 1).toString(36).substring(7)
-    const userName = `${name}#${r}`
-    await AsyncStorage.setItem('user', userName)
-    setName(userName)
-    setVisible(false)
-  }
+    const r = (Math.random() + 1).toString(36).substring(7);
+    const userName = `${name}#${r}`;
+    await AsyncStorage.setItem("user", userName);
+    setName(userName);
+    setVisible(false);
+  };
 
   const handleLogOut = async () => {
-    await AsyncStorage.clear()
-  }
+    await AsyncStorage.clear();
+  };
 
   const renderChats = ({ item }: any) => {
     return (
@@ -75,6 +86,7 @@ const Page = () => {
         renderItem={renderChats}
         keyExtractor={(item) => item._id.toString()}
       />
+
       <View style={tailwind`absolute bottom-10 right-6`}>
         <TouchableOpacity
           style={tailwind`w-7 h-7 rounded-full pl-[2px]  bg-yellow-300`}
@@ -91,11 +103,15 @@ const Page = () => {
           <Ionicons name="exit-outline" size={22} color="white" />
         </TouchableOpacity>
       </View>
+      <Text style={tailwind`text-center m-5`}>{greeting}</Text>
+
       <Dialog.Container visible={visible}>
         <Dialog.Title>UserName Required</Dialog.Title>
-        <Dialog.Description>Please Insert a name to Start a chatting</Dialog.Description>
+        <Dialog.Description>
+          Please Insert a name to Start a chatting
+        </Dialog.Description>
         <Dialog.Input onChangeText={setName} />
-        <Dialog.Button label='Set Name' onPress={setUser} />
+        <Dialog.Button label="Set Name" onPress={setUser} />
       </Dialog.Container>
     </View>
   );

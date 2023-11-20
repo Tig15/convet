@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as greeting from "../greeting";
 import type * as groups from "../groups";
 import type * as http from "../http";
 import type * as messages from "../messages";
@@ -27,6 +28,7 @@ import type * as messages from "../messages";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  greeting: typeof greeting;
   groups: typeof groups;
   http: typeof http;
   messages: typeof messages;
