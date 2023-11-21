@@ -14,6 +14,7 @@ import tailwind from "twrnc";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Dialog from "react-native-dialog";
+import ModalPage from "../components/Modal";
 
 const Page = () => {
   const groups = useQuery(api.groups.get) || [];
@@ -22,6 +23,7 @@ const Page = () => {
   const [visible, setVisible] = useState(false);
   const [greeting, setGreeting] = useState("");
   const performGreetingAction = useAction(api.greeting.getGreeting);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     loadUser();
@@ -63,14 +65,14 @@ const Page = () => {
     return (
       <TouchableOpacity
         onPress={() => router.push(`/(chat)/${item._id}`)}
-        style={tailwind`gap-3 mx-2 my-2 bg-slate-700 p-[8px] rounded-lg shadow-lg flex-row`}
+        style={tailwind`gap-3 mx-2 my-2 bg-[#706233] p-[8px] rounded-lg shadow-lg flex-row`}
       >
         <Image
           source={{ uri: item.icon_url }}
           style={tailwind`w-13 h-13 rounded-full`}
         />
         <View style={tailwind`gap-1`}>
-          <Text style={tailwind`text-lg text-slate-100`}>{item.name}</Text>
+          <Text style={tailwind`text-lg text-[#E1C78F]`}>{item.name}</Text>
           <Text style={tailwind`text-xs text-slate-300`}>
             {item.description}
           </Text>
@@ -87,23 +89,25 @@ const Page = () => {
         keyExtractor={(item) => item._id.toString()}
       />
 
-      <View style={tailwind`absolute bottom-10 right-6`}>
+      <View style={tailwind`absolute bottom-20 left-8`}>
         <TouchableOpacity
-          style={tailwind`w-7 h-7 rounded-full pl-[2px]  bg-yellow-300`}
-          onPress={() => router.push("/(modal)/create")}
+          style={tailwind`w-9 h-9 rounded-full pl-[2px]  bg-[#F4BF96]`}
+          onPress={() => setModalVisible(true)}
         >
-          <Ionicons name="add" size={26} color="#3876BF" />
+          <Ionicons name="add" size={34} color="#3876BF" />
         </TouchableOpacity>
       </View>
-      <View style={tailwind`absolute bottom-18 right-6`}>
+      <View style={tailwind`absolute bottom-20 right-8`}>
         <TouchableOpacity
-          style={tailwind`w-7 h-7 rounded-full pl-[5px] pt-[2px]  bg-red-300`}
+          style={tailwind`w-9 h-9 rounded-full pl-[6px] pt-[4px]  bg-[#CE5A67]`}
           onPress={handleLogOut}
         >
-          <Ionicons name="exit-outline" size={22} color="white" />
+          <Ionicons name="exit-outline" size={26} color="white" />
         </TouchableOpacity>
       </View>
+     
       <Text style={tailwind`text-center m-5`}>{greeting}</Text>
+      
 
       <Dialog.Container visible={visible}>
         <Dialog.Title>UserName Required</Dialog.Title>
@@ -113,6 +117,10 @@ const Page = () => {
         <Dialog.Input onChangeText={setName} />
         <Dialog.Button label="Set Name" onPress={setUser} />
       </Dialog.Container>
+      <ModalPage
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
     </View>
   );
 };

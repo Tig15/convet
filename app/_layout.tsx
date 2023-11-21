@@ -14,8 +14,8 @@ export default function RootLayoutNav() {
     <ConvexProvider client={convex}>
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: "#F3F0CA" },
-          headerTintColor: "#3876BF",
+          headerStyle: { backgroundColor: "#B0926A" },
+          headerTintColor: "#FAE7C9", 
           headerTitleAlign: "center",
         }}
       >
@@ -23,22 +23,6 @@ export default function RootLayoutNav() {
           name="index"
           options={{
             headerTitle: "My Chats",
-          }}
-        />
-        <Stack.Screen
-          name="(modal)/create"
-          options={{
-            headerTitle: "Start a Chat",
-            presentation: "modal",
-            headerLeft: () => (
-              <TouchableOpacity onPress={() => router.push("/")}>
-                <Ionicons
-                  name="close-circle-outline"
-                  size={30}
-                  color="#3876BF"
-                />
-              </TouchableOpacity>
-            ),
           }}
         />
         <Stack.Screen
