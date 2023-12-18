@@ -15,14 +15,20 @@ export default function RootLayoutNav() {
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: "#B0926A" },
-          headerTintColor: "#FAE7C9", 
+          headerTintColor: "#FAE7C9",
           headerTitleAlign: "center",
         }}
       >
         <Stack.Screen
           name="index"
           options={{
-            headerTitle: "My Chats",
+            headerTitle: "Login",
+          }}
+        />
+        <Stack.Screen
+          name="home"
+          options={{
+            headerTitle: "Convet",
           }}
         />
         <Stack.Screen
